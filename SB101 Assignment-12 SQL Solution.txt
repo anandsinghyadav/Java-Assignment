@@ -1,0 +1,193 @@
+Problem 1: Category Brands
+--------------------------
+Identify the Number of unique brands whose product the company sells within each category.
+Order your output by Category ID.
+Print Category Id, Category Name and the Number of unique brands corresponding to the category.
+Sort the result set in ascending order of Category ID.
+
+Solution: 
+select c.CategoryID, c.CategoryName, count(DISTINCT p.brand) as count_of_brands
+from category c
+join products p
+on c.CategoryID = p.Category_ID
+group by c.CategoryID, c.CategoryName
+order by categoryid;
+
+Problem 2: Highest Transaction
+--------------------------
+Identify which was the highest transaction value for each payment method.
+Print Payment ID, Payment Type and Highest transaction value for that particular payment type.
+Include all payment methods irrespective of their active status.
+Sort the result set in ascending order of Payment ID.
+
+Solution: 
+SELECT a.PaymentID, PaymentType, MAX(Total_Order_amount)
+FROM Orders b
+RIGHT JOIN Payments a
+ON a.PaymentID = b.PaymentID
+GROUP BY a.PaymentID, PaymentType
+ORDER BY PaymentID;
+
+Problem 3: Order Payments
+--------------------------
+Get the details of the different payment methods along with the corresponding number of orders for which the payment methods were used. Print PaymentID, PaymentType, Allowed, Count of Orders. Include all payment methods irrespective of them being allowed or not. Sort the result set in ascending order of PaymentID.
+
+Solution:
+SELECT a.*, COUNT(OrderID) as Number_of_Orders FROM Payments a
+LEFT JOIN Orders b
+ON a.PaymentID = b.PaymentID
+GROUP BY PaymentID, PaymentType, Allowed
+ORDER BY PaymentID; 
+
+
+Problem 4: City, Country Numbers
+--------------------------
+Find the Number of Customers belonging to each City of every Country.
+Print City, Country and Number of Customers belonging to each City and Country combination in your output.
+Sort the result set in alphabetical order of City names.
+
+Solution:
+select City, Country, COUNT(*) FROM Customers
+GROUP BY City, Country
+ORDER BY City;
+
+Problem 5: 3 Customers
+--------------------------
+Get the city and states which have less than 3 customers.
+Print City, State and Count of customers who belong to that city.
+Sort the result set in alphabetical order of City names.
+
+Solution:
+SELECT City, State, COUNT(CustomerID) as Num_of_Citizens FROM Customers
+GROUP BY City, State
+HAVING COUNT(CustomerID) < 3
+ORDER BY City;
+
+Problem 6: M Customers
+--------------------------
+For each country get the number of customers whose names start with 'M'.
+Print Country in alphabetical order in first column and count of customers in second column.
+
+Solution: 
+SELECT Country, COUNT(*) as Num_of_Citizens
+FROM Customers
+WHERE FirstName LIKE 'M%'
+GROUP BY Country
+ORDER BY Country;
+
+Problem 7: Customer Total Expenditure
+--------------------------
+Get details of customers along with their total spend across the different orders they ordered. Print CustomerID, FirstName, LastName and Total_Spend in the result set. Order the result set in asceding order of CustomerID.
+
+Solution:
+SELECT a.CustomerID, FirstName, LastName, SUM(Total_Order_Amount) as Total_Spent
+FROM Customers a
+JOIN Orders b
+ON a.CustomerID = b.Customerid
+GROUP BY a.CustomerID, FirstName, LastName
+ORDER BY CustomerID; 
+
+Problem 8: Shipping Orders
+--------------------------
+Get Shipper details along with the number of Orders shipped by them. Print ShipperID, CompanyName, Phone and Number of orders shipped. Sort the result set in ascending order of ShipperID.
+
+Solution: 
+SELECT a.*, COUNT(*) as Number_of_Orders FROM Shippers a
+JOIN Orders b
+ON a.ShipperID = b.ShipperID
+GROUP BY ShipperID, CompanyName, Phone
+ORDER BY ShipperID;
+
+Problem 9: Most Expensive Orders
+--------------------------
+Identify top 10 most expensive orders.
+Identify the customers who placed these orders.
+Print Customer ID, First Name, Last Name and Total Order amount in the result set.
+Sort the result set in descending order of Total Order Amount.
+
+Solution: 
+SELECT a.CustomerID, FirstName, LastName, Total_Order_Amount FROM orders a
+JOIN Customers b
+ON a.CustomerID = b.Customerid
+ORDER BY Total_Order_Amount DESC
+LIMIT 10;
+
+Problem 10: Max Spend
+--------------------------
+Print Customer ID, First Name, Last Name, Email and the maximum they spent on a particular order.
+Sort the result set in ascending order of Customer ID.
+
+Solution: 
+SELECT a.CustomerID, FirstName, LastName, Email, MAX(Total_Order_amount) FROM customers a
+JOIN Orders b
+ON a.CustomerID = b.CustomerID
+GROUP BY a.CustomerID, FirstName, LastName, Email
+ORDER BY CustomerID ;
+
+Problem 11: Top 5 Cities
+--------------------------
+Identify top 5 Cities whose customers placed the most orders.
+Print City, State, Country, Number of Orders in the result set.
+Sort the result set in descending order of Number of Orders.
+
+Solution: 
+SELECT City, State, Country, COUNT(*) FROM customers a
+JOIN Orders b
+ON a.CustomerID = b.CustomerID
+GROUP BY City, State, Country
+ORDER BY COUNT(*) DESc
+LIMIT 5;
+
+Problem 12: Top Ordered Products
+--------------------------
+Identify top 3 Products which were ordered the most in quantity across all orders.
+Print Product ID, Product Name and corresponding total quantity.
+Sort the result set in descending order of total quantity.
+
+Solution: 
+SELECT c.ProductId, Product, SUM(Quantity) FROM Orderdetails b
+JOIN Products c
+ON b.productid = c.productid
+GROUP BY c.ProductId, Product
+ORDER BY SUM(quantity) DESC
+LIMIT 3;
+
+Problem 13: Product Categories
+--------------------------
+Identify number of products sold under each category.
+Print Category ID, Category Name and Number of products.
+Sort the result set in ascending order of Category ID.
+
+Solution: 
+SELECT CategoryID, CategoryName, COUNT(*) FROM Category a
+JOIN products b
+ON a.categoryid = b.category_id
+GROUP BY CategoryID, CategoryName
+ORDER BY categoryid;
+
+Problem 14: 1 Order
+--------------------------
+Print all details of the Customer who ordered only once.
+
+Solution: 
+SELECT * FROM customers WHERE CustomerID IN (SELECT a.CustomerID FROM orders a
+JOIN Customers b
+ON a.CustomerID = b.Customerid
+GROUP BY a.CustomerID
+HAVING COUNT(*) = 1);
+
+Problem 15: Top 3 Countries
+--------------------------
+Identify top 3 Countries whose customers placed the most orders.
+Print Country and Number of Orders.
+Sort the result set in descendng order of Number of orders.
+
+Solution: 
+SELECT Country, COUNT(*) FROM customers a
+JOIN Orders b
+ON a.CustomerID = b.CustomerID
+GROUP BY Country
+ORDER BY COUNT(*) DESC
+LIMIT 3;
+
+
