@@ -1,0 +1,198 @@
+Problem 1: Average Spending
+---------------------------
+Identify the Average Amount spent by each customer across all the orders placed by them.
+Print Customer ID, First Name, Last Name and Average Amount Spent.
+Sort the result set in ascending order of Customer ID.
+
+
+Solution:
+SELECT a.CustomerID, FirstName, LastName, AVG(Total_Order_Amount) 
+FROM Customers a
+JOIN Orders b
+ON a.customerid = b.customerid
+GROUP BY a.CustomerID, FirstName, LastName
+ORDER BY CustomerID;
+
+Problem 2: Cheapest Spends
+-------------------------
+For each customer identify the order which had the Least Total Order Amoun paid by them.
+Print Customer ID, First Name, Last Name,Least Total Order Amount.
+Sort the result set in ascending order of Customer ID.
+
+Solution:
+SELECT a.CustomerID, FirstName, LastName, MIN(Total_Order_Amount) 
+FROM Customers a
+JOIN Orders b
+ON a.customerid = b.customerid
+GROUP BY a.CustomerID, FirstName, LastName
+ORDER BY CustomerID;
+
+Problem 3:Lowest Transaction
+----------------------------
+Identify which was the Lowest transaction value for each payment method.
+Print Payment ID, Payment Type and Lowest transaction value for that particular payment type.
+Include all payment methods irrespective of their active status.
+Sort the result set in ascending order of Payment ID.
+
+Solution:
+SELECT a.PaymentID, PaymentType, MIN(Total_Order_amount)
+FROM Orders b
+RIGHT JOIN Payments a
+ON a.PaymentID = b.PaymentID
+GROUP BY a.PaymentID, PaymentType
+ORDER BY PaymentID;
+
+Problem 4: Select Country Orders
+-------------------------------
+Identify those Countries through which the number of orders placed were between 100 (included) and 200 (included).
+Print Country in alphabetical order followed by Count of Orders.
+
+Solution:
+SELECT Country, COUNT(*) FROM Customers a
+JOIN Orders b
+ON a.customerid = b.customerid
+GROUP BY Country
+HAVING COUNT(*) BETWEEN 100 AND 200
+ORDER BY Country;
+
+Problem 5:Expensive Orders From Cities
+--------------------------------------- 
+Identiy top 5 Cities from which the Most Expensive Orders were placed.
+Print City followed by the Total Order Amount.
+Sort the resut set in descending order of Total Order Amount.
+
+Solution:
+SELECT City, MAX(Total_Order_Amount) FROM Customers a
+JOIN Orders b
+ON a.customerid = b.customerid
+GROUP BY City
+ORDER BY MAX(Total_Order_Amount) desc
+LIMIT 5;
+
+Problem 6: Least Expensive Orders From Cities
+---------------------------------------------
+Identiy top 5 Cities from which the Least Expensive Orders were placed.
+Print City followed by the Total Order Amount.
+Sort the resut set in ascending order of Total Order Amount.
+
+Solution:
+SELECT City, MIN(Total_Order_Amount) FROM Customers a
+JOIN Orders b
+ON a.customerid = b.customerid
+GROUP BY City
+ORDER BY MIN(Total_Order_Amount) 
+LIMIT 5;
+
+Problem 7: City Average Order Amount
+------------------------------------
+Calculate the Average Order Amount amongst orders placed from each City.
+Print City followed by the Average Order Amount.
+Sort the result set in alphabetical order of City names.
+
+Solution:
+SELECT City, AVG(Total_Order_Amount) FROM Customers a
+JOIN Orders b
+ON a.customerid = b.customerid
+GROUP BY City
+ORDER BY City ;
+
+Problem 8: Category - Sub Categories
+------------------------------------
+Identify the count of unique Sub Category within each category.
+Print Category Id, Category Name and the Count of corresponding Sub Categories.
+Sort the result set in ascending order of Category ID.
+
+Solution:
+select c.CategoryID, c.CategoryName, count(DISTINCT sub_category) as count_of_sub_category
+from category c
+join products p
+on c.CategoryID = p.Category_ID
+group by c.CategoryID, c.CategoryName
+order by categoryid;
+
+Problem 9: Average Prices 
+------------------------
+Calculate the average of Sale Price and Market Price for each product. Print ProductID, Average of Sale Price and Market Price in the result. Sort the result set in ascending order of ProductID.
+
+Solution:
+SELECT ProductID, (sale_price + market_price) / 2 FROM Products
+ORDER BY ProductID;
+
+Problem 10: Minimum Sale Price
+-------------------------------
+Get the minimum Sale price of products for each Sub Category.
+Print the Sub Category in alphabetical order in the first column, followed by corresponding minimum Sale price in the second column.
+
+Solution:
+SELECT Sub_Category, MIN(Sale_Price) as Min_sale_price FROM Products
+GROUP BY Sub_Category
+ORDER BY Sub_Category;
+
+Problem 11: Brand And Type 
+-------------------------
+Get the average Market Price across combinations of each Brand and Type.
+Print Brand in first column, Type in second column, followed by corresponding average Market Price in the third column.
+Sort the result set in alphabetical order of Brand, for rows with same Brand, sort them in alphabetical order of Type.
+
+Solution:
+SELECT Brand, Type, Avg(Sale_Price) as Avg_market_price FROM Products
+GROUP BY Brand, Type
+ORDER BY Brand, Type;
+
+Problem 12: Customer Total Expenditure
+-------------------------------------
+Get details of customers along with their total spend across the different orders they ordered. Print CustomerID, FirstName, LastName and Total_Spend in the result set. Order the result set in asceding order of CustomerID.
+
+Solution:
+SELECT a.CustomerID, FirstName, LastName, SUM(Total_Order_Amount) as Total_Spent
+FROM Customers a
+JOIN Orders b
+ON a.CustomerID = b.Customerid
+GROUP BY a.CustomerID, FirstName, LastName
+ORDER BY CustomerID;
+
+Problem 13: Most Orders
+----------------------
+Identiy top 10 customers who placed the most number of orders.
+Print Customer ID, First Name, Last Name and Number of orders placed.
+Sort the result set in descending order of Number of orders, for same Number of orders sort such records in ascending order of Customer ID.
+
+Solution:
+SELECT a.CustomerID, FirstName, LastName, COUNT(*) FROM orders a
+JOIN Customers b
+ON a.CustomerID = b.Customerid
+GROUP BY a.CustomerID, FirstName, LastName
+ORDER BY COUNT(*) DESC, CustomerID
+LIMIT 10;
+
+Problem 14: 6 Orders
+-------------------
+Print Customer ID, First Name and Last Name of customers who placed equivalent to 6 Number of orders.
+Sort the result set in ascending order of Customer ID.
+
+Solution:
+SELECT a.CustomerID, FirstName, LastName FROM orders a
+JOIN Customers b
+ON a.CustomerID = b.Customerid
+GROUP BY a.CustomerID, FirstName, LastName
+HAVING COUNT(*) = 6
+ORDER BY CustomerID;
+
+Problem 15: Top 5 Categories
+----------------------------
+Identify top 5 categories which had the highest quantity of products ordered.
+Print Category ID, Category Name and Corresponding Total Quantity.
+Sort the result in descending order of Total Quantity.
+
+Solution:
+SELECT  a.Category_ID, CategoryName, SUM(Quantity) as total_quantity 
+FROM Products a
+JOIN Category b
+on a.Category_ID = b.CategoryID
+JOIN OrderDetails c
+on c.ProductID = a.ProductID
+GROUP BY a.Category_ID, CategoryName
+ORDER BY SUM(QUantity) DESC
+LIMIT 5;
+
+
